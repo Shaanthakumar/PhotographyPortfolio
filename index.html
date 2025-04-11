@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photography Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            color: #fff;
+            line-height: 1.6;
+        }
+        
+        /* Profile Button Styles */
+        .profile-container {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+        }
+        
+        .profile-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .profile-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        .profile-btn img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .profile-details {
+            position: absolute;
+            top: 60px;
+            left: 0;
+            width: 250px;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .profile-details.show {
+            display: block;
+        }
+        
+        .profile-details img {
+            width: 80px;
+            height: 120px; /* Changed to vertical rectangle */
+            object-fit: cover;
+            margin: 0 auto 15px;
+            display: block;
+            border: 2px solid #fff;
+            border-radius: 5px; /* Slight rounding for modern look */
+        }
+        
+        .profile-details h3 {
+            text-align: center;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+        
+        .profile-details p {
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+        
+        .profile-details a {
+            color: #4dabf7;
+            text-decoration: none;
+        }
+        
+        .profile-details a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Main Content Styles */
+        .section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 4rem 2rem;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            position: relative;
+        }
+        
+        .section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+        
+        .section-content {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            width: 100%;
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 300;
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        
+        h2 {
+            font-size: 2.2rem;
+            font-weight: 300;
+            margin-bottom: 1.5rem;
+            letter-spacing: 1px;
+        }
+        
+        h3 {
+            font-size: 1.8rem;
+            font-weight: 400;
+            margin: 2rem 0 1rem;
+            color: #f5f5f5;
+        }
+        
+        .subtitle {
+            font-size: 1.5rem;
+            font-weight: 300;
+            margin-bottom: 2rem;
+        }
+        
+        .highlight {
+            font-weight: 400;
+            color: #f5f5f5;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+        
+        .stat-item {
+            font-size: 1.8rem;
+            font-weight: 300;
+        }
+        
+        .stat-item span {
+            font-size: 3.5rem;
+            font-weight: 400;
+            display: block;
+            color: #fff;
+        }
+        
+        .testimonial {
+            max-width: 600px;
+            margin: 2rem auto 0;
+            font-style: italic;
+            font-size: 1.5rem;
+            line-height: 1.8;
+            padding: 1.5rem;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-left: 3px solid #fff;
+        }
+        
+        /* Services Section */
+        .services-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .service-card {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 8px;
+            flex: 1 1 300px;
+            max-width: 400px;
+            text-align: left;
+            backdrop-filter: blur(5px);
+        }
+        
+        .service-card h3 {
+            margin-top: 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            padding-bottom: 0.5rem;
+        }
+        
+        .service-card p {
+            margin-bottom: 1rem;
+        }
+        
+        .service-list {
+            list-style-type: none;
+        }
+        
+        .service-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.2);
+        }
+        
+        .service-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .dimension {
+            font-size: 1rem;
+            color: #ccc;
+            margin-bottom: 2rem;
+        }
+
+        /* Showcase Section */
+        .showcase-card {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 8px;
+            max-width: 500px;
+            margin: 0 auto;
+            backdrop-filter: blur(5px);
+            position: relative;
+        }
+        
+        .showcase-frame {
+            width: 100%;
+            max-width: 400px;
+            height: 300px;
+            margin: 1rem auto;
+            border: 15px solid #fff;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            background-image: url('S:/Projects/Senthuron/frame-image.jpg'); /* Add your frame image */
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .showcase-list {
+            list-style-type: none;
+            text-align: left;
+            margin-top: 1.5rem;
+        }
+        
+        .showcase-list li {
+            padding: 0.8rem 0;
+            font-size: 1.2rem;
+        }
+        
+        .edit-note {
+            margin-top: 2rem;
+            font-style: italic;
+            color: #ccc;
+        }
+
+        /* Background Images */
+        .section-1 {
+            background-image: url('S:/Projects/Senthuron/a1.jpeg');
+        }
+        
+        .section-2 {
+            background-image: url('S:/Projects/Senthuron/a2.jpeg');
+        }
+        
+        .section-3 {
+            background-image: url('S:/Projects/Senthuron/a3.jpeg');
+        }
+        
+        .section-4 {
+            background-image: url('S:/Projects/Senthuron/a4.jpeg');
+        }
+        
+        .section-5 {
+            background-image: url('S:/Projects/Senthuron/a5.jpeg');
+        }
+    </style>
+</head>
+<body>
+    <!-- Profile Button -->
+    <div class="profile-container">
+        <div class="profile-btn" id="profileBtn">
+            <img src="S:/Projects/Senthuron/s1.jpg" alt="Profile">
+        </div>
+        <div class="profile-details" id="profileDetails">
+            <img src="S:/Projects/Senthuron/s2.jpg" alt="Shaanthakumar">
+            <h3>Shaanthakumar</h3>
+            <p>Professional Photographer</p>
+            <p><a href="tel:8300719213">8300719213</a></p>
+            <p><a href="mailto:shaanthakumaru@gmail.com">shaanthakumaru@gmail.com</a></p>
+            <p><a href="https://www.linkedin.com/in/shaanthakumaru/" target="_blank">@shaanthakumaru</a></p>
+        </div>
+    </div>
+
+    <!-- Section 1 -->
+    <div class="section section-1">
+        <div class="section-content">
+            <h1>Creating Timeless Memories</h1>
+            <h2>One Frame at a Time</h2>
+            <p class="subtitle">A Legacy of Excellence <span class="highlight">in Photography</span></p>
+        </div>
+    </div>
+    
+    <!-- Section 2 -->
+    <div class="section section-2">
+        <div class="section-content">
+            <h1>The Faces Behind the Lens</h1>
+            <h2>Jay Dheshiy A</h2>
+            <h2>What Sets Us Apart</h2>
+            <div class="stats">
+                <div class="stat-item">
+                    <span>1,000+</span>
+                    Projects
+                </div>
+            </div>
+            <h2>Partnering for Perfection</h2>
+        </div>
+    </div>
+    
+    <!-- Section 3 -->
+    <div class="section section-3">
+        <div class="section-content">
+            <h1>Partnering for Perfection</h1>
+            <h2>What Our Clients Say</h2>
+            <p class="testimonial">"I Really Enjoyed Working with Stunning Events"</p>
+        </div>
+    </div>
+    
+    <!-- Section 4 - Services -->
+    <div class="section section-4">
+        <div class="section-content">
+            <h1>Capturing Every Moment, Perfectly</h1>
+            <p class="dimension">1440 x 648</p>
+            <h3>Our Services</h3>
+            
+            <div class="services-container">
+                <div class="service-card">
+                    <h3>Wedding Photography & Videography</h3>
+                    <p>Your smartphone is a digital camera and your smartphone provides many of its best available services. It has been a great time for you to use the Internet and provide more information about your personal life. You can also help you with your personal life. I am happy to see your friends and family who are working on this.</p>
+                </div>
+                
+                <div class="service-card">
+                    <h3>New Born & Toddlers</h3>
+                    <ul class="service-list">
+                        <li>Ear piercing Ceremony</li>
+                        <li>Puberty Ceremony</li>
+                        <li>Housewarming Ceremony</li>
+                        <li>Baby Shower</li>
+                        <li>Naming Ceremony</li>
+                        <li>Pre or Post Photoshoot</li>
+                        <li>Birthday Celebration</li>
+                        <li>Maternity Photoshoot</li>
+                        <li>60th Wedding Anniversary</li>
+                        <li>Corporate Photography</li>
+                        <li>Product Photography</li>
+                        <li>Ask to edit</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Section 5 - Showcase -->
+    <!-- Section 5 - Showcase -->
+<div class="section section-5">
+    <div class="section-content">
+        <h1>A Showcase of Excellence in Every Frame</h1>
+        <div class="showcase-card">
+            <div class="showcase-frame">
+                <img src="S:/Projects/Senthuron/a6.jpeg" alt="Showcase Example" class="framed-image">
+            </div>
+            <p>Watching it Enjoygames!</p>
+            <ul class="showcase-list">
+                <li>New Room Play</li>
+                <li>Baby Shower</li>
+                <li>Housawarming</li>
+                <li>Fredack</li>
+                <li>Maternity</li>
+            </ul>
+            <p class="edit-note">Ask to edit</p>
+        </div>
+    </div>
+</div>
+
+<style>
+    .showcase-card {
+        background-color: rgba(255, 255, 255, 0.1);
+        padding: 2rem;
+        border-radius: 8px;
+        max-width: 500px;
+        margin: 0 auto;
+        backdrop-filter: blur(5px);
+        position: relative;
+    }
+    
+    .showcase-frame {
+        width: 100%;
+        max-width: 400px;
+        height: 300px;
+        margin: 1rem auto;
+        border: 15px solid #fff;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+        position: relative;
+    }
+    
+    .framed-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+    
+    .showcase-list {
+        list-style-type: none;
+        text-align: left;
+        margin-top: 1.5rem;
+    }
+    
+    .showcase-list li {
+        padding: 0.8rem 0;
+        font-size: 1.2rem;
+    }
+    
+    .edit-note {
+        margin-top: 2rem;
+        font-style: italic;
+        color: #ccc;
+    }
+</style>
+
+    <script>
+        // Profile toggle functionality
+        const profileBtn = document.getElementById('profileBtn');
+        const profileDetails = document.getElementById('profileDetails');
+        
+        profileBtn.addEventListener('click', function() {
+            profileDetails.classList.toggle('show');
+        });
+        
+        // Close profile details when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!profileBtn.contains(event.target) && !profileDetails.contains(event.target)) {
+                profileDetails.classList.remove('show');
+            }
+        });
+    </script>
+</body>
+</html>
